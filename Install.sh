@@ -6,7 +6,7 @@ ARCH=$(uname -m)
 IS_64=false
 [[ $ARCH == x86_64 ]] && IS_64=true
 
-if ! yum -y install rpm wget binutils gcc kernel-devel mesa-libGL mesa-libGLU libbsd-devel dkms; then
+if ! yum -y install rpm wget binutils gcc kernel-devel mesa-libGL mesa-libGLU libbsd-devel dkms libbsd glibc-devel libX11-devel help2man autoconf git tar glib2 glib2-devel kernel-headers automake gtk2-devel; then
     echo "The package manager failed to install dependencies for the nVidia driver"
     exit 2
 fi
@@ -31,8 +31,8 @@ dkms install -m bbswitch -v 0.5
 wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.x86_64.rpm
 wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.i386.rpm
 
-yum localinstall VirtualGL-2.3.2.x86_64.rpm
-yum localinstall VirtualGL-2.3.2.i386.rpm
+yum -y localinstall VirtualGL-2.3.2.x86_64.rpm
+yum -y localinstall VirtualGL-2.3.2.i386.rpm
 
 #bumblebee instalation
 
@@ -41,6 +41,7 @@ cd bumblebee-3.0.1
 ./configure --prefix=/usr --sysconfdir=/etc 
 make 
 make install
+cd ..
 cp ../Configuracion/bumblebeed.service /lib/systemd/system 
 
 groupadd bumblebee
@@ -50,7 +51,7 @@ systemctl enable bumblebeed.service
 systemctl start bumblebeed.service
 
 cd ..
-cd ..
+
 
 #NVIDIA Driver instalation
 echo "Getting 310.19 nVidia drivers version"
