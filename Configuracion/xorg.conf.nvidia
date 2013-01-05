@@ -1,0 +1,24 @@
+Section "Files"
+   ModulePath   "/usr/lib64/nvidia/"
+   ModulePath   "/usr/lib64/xorg/modules/"
+   ModulePath   "/usr/lib64/nvidia/xorg/modules"
+EndSection
+
+Section "ServerLayout"
+    Identifier "Layout0"
+    Option "AutoAddDevices" "false"
+EndSection
+
+Section "Device"
+    Identifier "Device1"
+    Driver "nvidia"
+    VendorName "NVIDIA Corporation"
+    Option "NoLogo" "true"
+    Option "UseEDID" "false"
+    Option "ConnectedMonitor" "DFP"
+EndSection
+
+Section "Screen"
+Identifier "Screen1"
+Device "Device1"
+EndSection
