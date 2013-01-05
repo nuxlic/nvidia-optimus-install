@@ -6,11 +6,53 @@ ARCH=$(uname -m)
 IS_64=false
 [[ $ARCH == x86_64 ]] && IS_64=true
 
-if ! yum -y install rpm wget binutils gcc kernel-devel mesa-libGL mesa-libGLU; then
+if ! yum -y install rpm wget binutils gcc kernel-devel mesa-libGL mesa-libGLU libbsd-devel dkms; then
     echo "The package manager failed to install dependencies for the nVidia driver"
     exit 2
 fi
 
+#Resources Download
+mkdir resources
+cd resources
+
+wget https://github.com/downloads/Bumblebee-Project/Bumblebee/bumblebee-3.0.1.tar.gz
+wget https://github.com/downloads/Bumblebee-Project/bbswitch/bbswitch-0.5.tar.gz
+
+#bbswitch module install
+tar xvzf bbswitch-0.5.tar.gz
+cp -Rv  bbswitch-0.5 /usr/src
+ln -s /usr/src/bbswitch-0.5/dkms/dkms.conf /usr/src/bbswitch-0.5/dkms.conf
+dkms add -m bbswitch -v 0.5
+dkms build -m bbswitch -v 0.5
+dkms install -m bbswitch -v 0.5
+
+#OpenGL with VirtualGl installation
+
+wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.x86_64.rpm
+wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.i386.rpm
+
+yum localinstall VirtualGL-2.3.2.x86_64.rpm
+yum localinstall VirtualGL-2.3.2.i386.rpm
+
+#bumblebee instalation
+
+tar xvzf bumblebee-3.0.1.tar.gz
+cd bumblebee-3.0.1
+./configure --prefix=/usr --sysconfdir=/etc 
+make 
+make install
+cp ../Configuracion/bumblebeed.service /lib/systemd/system 
+
+groupadd bumblebee
+usermod -a -G bumblebee $USER
+
+systemctl enable bumblebeed.service
+systemctl start bumblebeed.service
+
+cd ..
+cd ..
+
+#NVIDIA Driver instalation
 echo "Getting latest nVidia drivers version"
 TMPDIR="$(mktemp -d)"
 
@@ -61,7 +103,8 @@ rm -rf "${TMPDIR}"
 #Copy configuration
 if [ "$ARCH" = "x86_64" ]; then
    cp -f Configuracion/* /etc/bumblebee/
-elif then
+fi
+if [ "$ARCH" = "i686" ]; then
    echo "Your arch required manual configuration of /etc/bumblebee/bumblebee.conf and /etc/bumblebee/xorg-nvidia.conf"
 fi
 
