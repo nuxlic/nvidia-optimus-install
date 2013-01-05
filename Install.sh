@@ -56,6 +56,7 @@ cd ..
 echo "Getting 310.19 nVidia drivers version"
 TMPDIR="$(mktemp -d)"
 
+mkdir Driver
 cd Driver
 
 if $IS_64; then
