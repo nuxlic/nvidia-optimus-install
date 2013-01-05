@@ -68,8 +68,6 @@ elif [ "$ARCH" = "i686" ]; then
     wget http://es.download.nvidia.com/XFree86/Linux-x86/310.19/NVIDIA-Linux-x86-310.19.run
 fi
 
-cd ..
-
 cp Driver/"${NV_DRIVER}" "${TMPDIR}"
 
 
