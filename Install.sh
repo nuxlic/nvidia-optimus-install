@@ -31,13 +31,13 @@ dkms install -m bbswitch -v 0.5
 wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.x86_64.rpm
 wget http://downloads.sourceforge.net/project/virtualgl/VirtualGL/2.3.2/VirtualGL-2.3.2.i386.rpm
 
-#yum -y localinstall VirtualGL-2.3.2.x86_64.rpm
-#yum -y localinstall VirtualGL-2.3.2.i386.rpm
+yum -y localinstall VirtualGL-2.3.2.x86_64.rpm
+yum -y localinstall VirtualGL-2.3.2.i386.rpm
 
-yum -y install glibc.i686 libX11.i686 libXau.i686 libXdamage.i686 libXext.i686 libXfixes.i686 libXv.i686 libXxf86vm.i686 libdrm.i686 libgcc.i686 libpciaccess.i686 libselinux.i686 libstdc++.i686 libxcb.i686 mesa-libGL.i686 mesa-libGLU.i686 mesa-libglapi.i686 nss-softokn-freebl.i686 pcre.i686
+#yum -y install glibc.i686 libX11.i686 libXau.i686 libXdamage.i686 libXext.i686 libXfixes.i686 libXv.i686 libXxf86vm.i686 libdrm.i686 libgcc.i686 libpciaccess.i686 libselinux.i686 libstdc++.i686 libxcb.i686 mesa-libGL.i686 mesa-libGLU.i686 mesa-libglapi.i686 nss-softokn-freebl.i686 pcre.i686
 
-rpm -ivh --replacefiles VirtualGL-2.3.2.x86_64.rpm 
-rpm -ivh --replacefiles VirtualGL-2.3.2.i386.rpm 
+#rpm -ivh --replacefiles VirtualGL-2.3.2.x86_64.rpm 
+#rpm -ivh --replacefiles VirtualGL-2.3.2.i386.rpm 
 
 
 #bumblebee instalation
@@ -51,7 +51,9 @@ cd ..
 cp ../Configuracion/bumblebeed.service /lib/systemd/system 
 
 groupadd bumblebee
-usermod -a -G bumblebee $USER
+echo "Ingrese su nombre de usuario:"
+read nombre
+gpasswd -a $nombre bumblebee
 
 systemctl enable bumblebeed.service
 systemctl start bumblebeed.service
